@@ -40,8 +40,23 @@ exports.create = function(req, res) {
     impediment: req.body.impediment,
   });
 
-  entry.save();
-  res.redirect(301, '/');
+  // entry.schema.path('memberName')
+  //   .validate(function(value) {
+  //     return value != 'None';
+  //     'You have to select member name'
+  //   });
+
+  entry.save(function(err) {
+    if (err) {
+      var errMsg = 'Sorry, these was an error saving the stand-up meeting note. ' + err;
+      res.render('newnote', {
+        title: 'Standup - New Note (error)',
+        message: errMsg
+      });
+    } else {
+      res.redirect(301, '/');
+    }
+  });
 };
 
 exports.getNote = function(req, res) {
